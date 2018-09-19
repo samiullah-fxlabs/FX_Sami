@@ -1,6 +1,6 @@
 ---
 genPolicy: "Create"
-openAPISpec: "http://192.168.0.36:8090/v2/api-docs"
+openAPISpec: "None"
 generators:
 - type: "no_params"
   assertions:
@@ -21,6 +21,7 @@ generators:
     value: "1000"
     methods: "Get"
     denyRoles: null
+    allowRoles: null
     pathPatterns: "/**"
     resourceSamples: null
     queryParams: null
@@ -50,6 +51,7 @@ generators:
     value: null
     methods: "Post, Put, Delete"
     denyRoles: "Writer, Reader"
+    allowRoles: "Admin"
     pathPatterns: "/api/v1/orgs/**, /api/v1/accounts/**"
     resourceSamples: null
     queryParams: null
@@ -58,6 +60,7 @@ generators:
     value: null
     methods: "Post, Put, Delete"
     denyRoles: "Reader"
+    allowRoles: "Writer"
     pathPatterns: "/api/v1/projects/**, /api/v1/regions/**"
     resourceSamples: null
     queryParams: null
@@ -66,6 +69,7 @@ generators:
     value: null
     methods: "Post, Delete"
     denyRoles: "Collaborator"
+    allowRoles: "Reader, Writer"
     pathPatterns: "/api/v1/projects/**"
     resourceSamples: null
     queryParams: null
@@ -74,6 +78,7 @@ generators:
     value: null
     methods: "Get, Post, Put, Delete"
     denyRoles: "Other"
+    allowRoles: "Reader, Writer"
     pathPatterns: "/api/v1/**"
     resourceSamples: null
     queryParams: null
@@ -90,10 +95,21 @@ generators:
     value: null
     methods: null
     denyRoles: null
+    allowRoles: null
     pathPatterns: null
     resourceSamples: null
     queryParams: null
     bodyProperties: null
+- type: "XSS_Injection"
+  assertions:
+  - "@StatusCode != 200"
+  - "@StatusCode != 401"
+  - "@StatusCode != 404"
+  - "@StatusCode != 500"
+  severity: null
+  database: null
+  inactive: false
+  matches: []
 - type: "sql_injection_timebound"
   assertions:
   - "@ResponseTime > 7000"
@@ -103,16 +119,6 @@ generators:
   database:
     name: "MySQL"
     version: "5.7"
-  inactive: false
-  matches: []
-- type: "XSS_Injection"
-  assertions:
-  - "@StatusCode != 200"
-  - "@StatusCode != 401"
-  - "@StatusCode != 404"
-  - "@StatusCode != 500"
-  severity: null
-  database: null
   inactive: false
   matches: []
 - type: "log_Forging"
